@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>جدار الدعاء — دعواتنا لها</title>
+  <meta name="description" content="جدار الدعاء: اترك دعوة لطفلة مريضة، وكل دعوة تصير بطاقة مضيئة على الجدار يشوفها كل من يزور." />
+  <meta property="og:title" content="جدار الدعاء" />
+  <meta property="og:description" content="خلِّ دعوتك لها… كل دعوة فانوس يضوي على الجدار." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b1230" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;700&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.js" } }
+  </script>
+  <!-- Optional: copy config.example.js to config.js and fill Supabase keys -->
+  <script src="config.js" defer></script>
+</head>
+<body>
+  <!-- 3D canvas (lazy-mounted) -->
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <!-- soft vignette / grade overlay -->
+  <div class="grade" aria-hidden="true"></div>
+
+  <!-- loading veil -->
+  <div id="veil" class="veil">
+    <div class="veil-inner">
+      <div class="veil-lantern" aria-hidden="true">
+        <span class="flame"></span>
+      </div>
+      <h1 class="veil-title">جدار الدعاء</h1>
+      <p class="veil-sub">نجهّز لك المكان…</p>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header class="site-header">
+    <div class="header-text">
+      <h1 class="title">جدار الدعاء</h1>
+      <p class="subtitle">
+        لطفلة غالية بين يدي الأطباء…
+        <a class="story-link" href="https://x.com/M0ATH/status/2095793906848043196" target="_blank" rel="noopener">قصتها من هنا</a>
+      </p>
+    </div>
+    <!-- audio toggle -->
+    <button id="audioToggle" class="audio-toggle" type="button" aria-pressed="false" title="أجواء صوتية هادئة">
+      <span class="audio-icon" aria-hidden="true">♪</span>
+      <span class="audio-label">الأجواء</span>
+    </button>
+    <div class="counter" id="counter" title="عدد الدعوات على الجدار">
+      <span class="counter-num" id="counterNum">٠</span>
+      <span class="counter-label">دعوة</span>
+    </div>
+  </header>
+
+  <!-- card overlay (hover / tap) -->
+  <div id="cardOverlay" class="card-overlay" role="status" aria-live="polite" hidden>
+    <div class="card-overlay-inner">
+      <p class="card-msg" id="overlayMsg"></p>
+      <p class="card-name" id="overlayName"></p>
+    </div>
+  </div>
+
+  <!-- primary CTA -->
+  <button id="cta" class="cta" type="button">
+    <span class="cta-glow" aria-hidden="true"></span>
+    <span class="cta-text">خَلِّ دعوتك</span>
+    <span class="cta-icon" aria-hidden="true">🤲</span>
+  </button>
+
+  <!-- modal -->
+  <div id="modalBackdrop" class="modal-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-frame" aria-hidden="true"></div>
+      <h2 id="modalTitle" class="modal-title">اكتب دعوتك</h2>
+      <p class="modal-hint">من قلبك، بكلماتك… والله يسمعك</p>
+
+      <label class="field">
+        <span class="field-label">اسمك <em>(اختياري)</em></span>
+        <input id="nameInput" type="text" maxlength="30" placeholder="أبو فهد، أم عبدالله…" autocomplete="off" />
+      </label>
+
+      <label class="field">
+        <span class="field-label">دعوتك</span>
+        <textarea id="msgInput" rows="3" maxlength="140" placeholder="اكتب دعوتك هنا… الله يشفيها ويعافيها"></textarea>
+      </label>
+      <div class="field-foot">
+        <span id="charCount" class="char-count">١٤٠</span>
+        <span id="formError" class="form-error" role="alert"></span>
+      </div>
+
+      <div class="modal-actions">
+        <button id="submitBtn" class="submit" type="button">انشر الدعوة</button>
+        <button id="cancelBtn" class="cancel" type="button">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- toast -->
+  <div id="toast" class="toast" role="status" hidden>تقبّل الله دعوتك 🤲</div>
+
+  <footer class="site-footer">
+    <span>الدعاء لها ولجميع المرضى — اللهم اشفهم شفاءً لا يغادر سقمًا</span>
+    <span class="music-credit">الأجواء: "Eastminster" — Kevin MacLeod (incompetech.com), CC BY 4.0</span>
+  </footer>
+
+  <noscript>
+    <div class="noscript">هذه الصفحة تحتاج JavaScript عشان تعرض جدار الدعاء.</div>
+  </noscript>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
