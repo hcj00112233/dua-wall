@@ -108,12 +108,29 @@
   <footer class="site-footer">
     <span>الدعاء لها ولجميع المرضى — اللهم اشفهم شفاءً لا يغادر سقمًا</span>
     <span class="music-credit">الأجواء: "Eastminster" — Kevin MacLeod (incompetech.com), CC BY 4.0</span>
+    <span class="music-credit" id="busuanzi_container_site_pv" style="display:none">
+      زيارات: <span id="busuanzi_value_site_pv">…</span> · زوّار: <span id="busuanzi_value_site_uv">…</span>
+    </span>
   </footer>
 
   <noscript>
     <div class="noscript">هذه الصفحة تحتاج JavaScript عشان تعرض جدار الدعاء.</div>
   </noscript>
 
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script>
+    // أظهر العدّاد بعد وصول بيانات بوسوانزي
+    (function () {
+      var t = setInterval(function () {
+        var pv = document.getElementById('busuanzi_value_site_pv');
+        if (pv && pv.textContent.trim() && pv.textContent.trim() !== '…') {
+          document.getElementById('busuanzi_container_site_pv').style.display = 'block';
+          clearInterval(t);
+        }
+      }, 800);
+      setTimeout(function () { clearInterval(t); }, 20000);
+    })();
+  </script>
   <script type="module" src="app.js"></script>
 </body>
 </html>
