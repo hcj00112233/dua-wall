@@ -105,9 +105,16 @@ const store = {
     try {
       const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
       this.sb = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+      this.pingViews();
     } catch (e) {
       console.warn('[dua] supabase unavailable, local mode', e);
       this.mode = 'local';
+    }
+  },
+
+  async pingViews() {
+    if (this.mode === 'supabase' && this.sb) {
+      try { await this.sb.rpc('bump_views'); } catch {}
     }
   },
 
