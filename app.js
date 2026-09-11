@@ -95,12 +95,14 @@ function lsSave(list) {
 
 const cfg = (typeof window !== 'undefined' && window.DUA_CONFIG) || {};
 const hasSupabase = !!(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY);
+const apiBase = (cfg.API_BASE || '').replace(/\/+$/, '');
 
 const store = {
-  mode: hasSupabase ? 'supabase' : 'local',
+  mode: hasSupabase ? 'supabase' : (apiBase ? 'api' : 'local'),
   sb: null,
 
   async init() {
+    if (this.mode === 'api') { this.pingViews(); return; }
     if (!hasSupabase) return;
     try {
       const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
@@ -113,12 +115,20 @@ const store = {
   },
 
   async pingViews() {
-    if (this.mode === 'supabase' && this.sb) {
-      try { await this.sb.rpc('bump_views'); } catch {}
-    }
+    try {
+      if (this.mode === 'api') await fetch(apiBase + '/ping', { method: 'POST' });
+      else if (this.mode === 'supabase' && this.sb) await this.sb.rpc('bump_views');
+    } catch {}
   },
 
   async fetchAll() {
+    if (this.mode === 'api') {
+      try {
+        const r = await fetch(apiBase + '/prayers');
+        const j = await r.json();
+        if (j && Array.isArray(j.items)) return j.items.map((d) => ({ ...d, seed: false }));
+      } catch (e) { console.warn('[dua] api fetch failed', e); }
+    }
     if (this.mode === 'supabase' && this.sb) {
       const { data, error } = await this.sb
         .from('prayers')
@@ -133,6 +143,16 @@ const store = {
   },
 
   async insert(prayer) {
+    if (this.mode === 'api') {
+      try {
+        const r = await fetch(apiBase + '/prayers', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(prayer),
+        });
+        const j = await r.json();
+        if (j && j.item) return { ...j.item, seed: false };
+      } catch (e) { console.warn('[dua] api insert failed', e); }
+    }
     if (this.mode === 'supabase' && this.sb) {
       const { data, error } = await this.sb
         .from('prayers')
@@ -154,6 +174,24 @@ const store = {
   },
 
   subscribe(onInsert) {
+    if (this.mode === 'api') {
+      let last = null;
+      const tick = async () => {
+        try {
+          const r = await fetch(apiBase + '/prayers');
+          const j = await r.json();
+          const items = j.items || [];
+          const maxId = items.reduce((m, d) => Math.max(m, d.id || 0), 0);
+          if (last === null) { last = maxId; return; }
+          for (const d of items) {
+            if (d.id > last) onInsert({ ...d, seed: false });
+          }
+          last = Math.max(last, maxId);
+        } catch {}
+      };
+      const iv = setInterval(tick, 15000);
+      return () => clearInterval(iv);
+    }
     if (this.mode !== 'supabase' || !this.sb) return () => {};
     const ch = this.sb
       .channel('prayers-live')
