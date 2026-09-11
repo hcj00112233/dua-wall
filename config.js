@@ -2,5 +2,5 @@
 window.DUA_CONFIG = {
   SUPABASE_URL: "",
   SUPABASE_ANON_KEY: "",
-  API_BASE: "https://creative-assets-fabulous-residents.trycloudflare.com",
+  API_BASE: "https://dear-chrome-miracle-fine.trycloudflare.com",
 };
