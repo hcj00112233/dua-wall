@@ -2,5 +2,5 @@
 window.DUA_CONFIG = {
   SUPABASE_URL: "",
   SUPABASE_ANON_KEY: "",
-  API_BASE: "https://plays-rewards-justin-schema.trycloudflare.com",
+  API_BASE: "https://art-intersection-fabulous-decide.trycloudflare.com",
 };
