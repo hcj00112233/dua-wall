@@ -2,5 +2,5 @@
 window.DUA_CONFIG = {
   SUPABASE_URL: "",
   SUPABASE_ANON_KEY: "",
-  API_BASE: "https://art-intersection-fabulous-decide.trycloudflare.com",
+  API_BASE: "https://issued-mandatory-gel-enclosed.trycloudflare.com",
 };
