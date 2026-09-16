@@ -2,5 +2,5 @@
 window.DUA_CONFIG = {
   SUPABASE_URL: "",
   SUPABASE_ANON_KEY: "",
-  API_BASE: "https://titten-angela-enables-blonde.trycloudflare.com",
+  API_BASE: "https://dimensional-rolls-reader-fork.trycloudflare.com",
 };
